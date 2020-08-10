@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import nifori.me.nifobot.orm.entities.ServerInfo;
+import nifori.me.nifobot.commands.CommandMap;
 import nifori.me.nifobot.orm.repositories.LifechannelRepository;
 import nifori.me.nifobot.orm.repositories.ServerInfoRepository;
 
@@ -17,14 +17,10 @@ public class DemoApplication {
 	}
 
 	@Bean
-	public CommandLineRunner run(LifechannelRepository lifechannelRepository, ServerInfoRepository serverInfoRepository) {
+	public CommandLineRunner run(LifechannelRepository lifechannelRepository,
+			ServerInfoRepository serverInfoRepository, CommandMap commandsAsMap) {
 		return (args) -> {
-			System.out.println("Hello World");
-			ServerInfo tmpInfo = new ServerInfo(1, "§$", false);
-			serverInfoRepository.saveAndFlush(tmpInfo);
-			var serverInfos = serverInfoRepository.findAll();
-			System.out.println(serverInfos.size());
-			serverInfos.forEach(info -> System.out.println(info));
+			commandsAsMap.forEach((key, value) -> System.out.println(key + ": " + value));
 		};
 	}
 }

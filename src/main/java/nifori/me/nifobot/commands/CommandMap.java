@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class CommandMap extends HashMap<String, Command> {
     public CommandMap(List<? extends Command> commands) {
         commands.forEach(command -> {
-            this.put(command.getCommand(), command);
+            this.put(command.getTrigger(), command);
         });
     }
 }

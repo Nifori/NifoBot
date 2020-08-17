@@ -7,7 +7,7 @@ pipeline {
 	stages {
 		stage('Checkout'){
 			steps {
-				git 'https://github.com/Nifori/hello-world'
+				git 'https://github.com/Nifori/NifoBot'
 			}
 		}
 		stage('Check') {

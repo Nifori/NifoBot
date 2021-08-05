@@ -4,105 +4,53 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
+import discord4j.core.event.domain.Event;
+import discord4j.core.event.domain.guild.GuildCreateEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.object.entity.channel.Channel;
-import nifori.me.nifobot.commands.CommandMap;
-import nifori.me.nifobot.orm.entities.Lifechannel;
-import nifori.me.nifobot.orm.entities.ServerInfo;
-import nifori.me.nifobot.orm.repositories.LifechannelRepository;
-import nifori.me.nifobot.orm.repositories.ServerInfoRepository;
-import reactor.core.publisher.Mono;
+import lombok.extern.log4j.Log4j2;
+import nifori.me.nifobot.EventHandler.GuildCreateEventHandler;
+import nifori.me.nifobot.EventHandler.MessageCreateEventHandler;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"nifori.me"})
+@EnableAutoConfiguration
+@EnableJpaRepositories(basePackages = "nifori.me.persistence.repository")
+@Log4j2
 public class SpringMain {
 
-	public static void main(final String[] args) {
-		SpringApplication.run(SpringMain.class, args);
-	}
+    public static void main(final String[] args) {
+        SpringApplication.run(SpringMain.class, args);
+    }
 
-	@Value("${discordclient.id}")
-	private String id;
+    @Value("${discordclient.id}")
+    private String id;
 
-	@Value("${db.init}")
-	private boolean initdb;
+    @Autowired
+    private MessageCreateEventHandler messageCreateEventHandler;
 
-	@Autowired
-	private LifechannelRepository lifechannelRepository;
+    @Autowired
+    private GuildCreateEventHandler guildCreateEventHandler;
 
-	@Autowired
-	private ServerInfoRepository serverInfoRepository;
+    @Bean
+    public CommandLineRunner run(ApplicationContext ctx) {
+        return (args) -> {
 
-	@Autowired
-	private CommandMap commandMap;
+            final DiscordClient client = DiscordClient.create(id);
+            final GatewayDiscordClient gateway = client.login().block();
 
-	public void runInitDB() {
-		serverInfoRepository.saveAndFlush(new ServerInfo(305743481991593985L, "§$", false));
-		serverInfoRepository.saveAndFlush(new ServerInfo(736316283720695888L, "§$", false));
+            gateway.on(Event.class).subscribe(log::info);
 
-		lifechannelRepository.saveAndFlush(new Lifechannel(305743481991593985L, 736330400103661648L));
-		lifechannelRepository.saveAndFlush(new Lifechannel(736316283720695892L, 736316317614866533L));
-		lifechannelRepository.saveAndFlush(new Lifechannel(736325231425224806L, 736316283720695892L));
-	}
+            gateway.on(MessageCreateEvent.class).subscribe(messageCreateEventHandler::handleEvent);
+            gateway.on(GuildCreateEvent.class).subscribe(guildCreateEventHandler::handleEvent);
 
-	public String getTrigger(String messageContent, String prefix) {
-		var beginIndex = prefix.length();
-		var endIndex = messageContent.indexOf(" ");
-		var trigger = messageContent.substring(beginIndex, endIndex != -1 ? endIndex : messageContent.length());
-		return trigger;
-	}
-
-	@Bean
-	public CommandLineRunner run() {
-		return (args) -> {
-			if (initdb)
-				runInitDB();
-
-			if (!id.equals("abc")) {
-				final DiscordClient client = DiscordClient.create(id);
-				final GatewayDiscordClient gateway = client.login().block();
-
-				gateway.on(MessageCreateEvent.class).subscribe(event -> {
-
-					if (event.getMember().get().isBot())
-						return;
-
-					ServerInfo info = null;
-
-					if (event.getGuildId().isPresent()) {
-						var guildId = event.getGuildId().get().asLong();
-						info = serverInfoRepository.findById(guildId).orElse(null);
-					}
-
-					if (info != null) {
-						var content = event.getMessage().getContent();
-						if (content != null && content.startsWith(info.getPrefix())) {
-							var trigger = getTrigger(event.getMessage().getContent(), info.getPrefix());
-							commandMap.get(trigger).run(event);
-						} else {
-							var livechannel = lifechannelRepository.findById(event.getMessage().getChannelId().asLong())
-									.orElse(null);
-							if (livechannel != null) {
-								Mono<Channel> channelById = gateway
-										.getChannelById(Snowflake.of(livechannel.getOutputid()));
-								if (content != null && !content.isEmpty()) {
-									channelById.block().getRestChannel().createMessage(event.getMessage().getContent())
-											.block();
-								}
-								event.getMessage().getAttachments().forEach(attachment -> {
-									channelById.block().getRestChannel().createMessage(attachment.getUrl()).block();
-								});
-							}
-						}
-					}
-				});
-				gateway.onDisconnect().block();
-			}
-		};
-	}
+            gateway.onDisconnect().block();
+        };
+    }
 }

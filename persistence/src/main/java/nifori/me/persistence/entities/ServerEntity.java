@@ -18,13 +18,12 @@ import java.util.List;
 public class ServerEntity {
 
     @Id
-    @GeneratedValue
-    @SequenceGenerator(name = "SERVER_Q01")
     private Long OID;
 
     private String servername;
+    private String prefix;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ServerOID")
     private List<ChannelEntity> channels;
 
     

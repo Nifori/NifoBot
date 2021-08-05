@@ -5,21 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "CHANNEL_T01")
-public class ChannelEntity {
+@Table(name = "USER_T01")
+public class UserEntity {
 
-    @Id
-    private Long OID;
-
-    private String channelname;
-
-    private Long ServerOID;
-
+  @Id
+  private long OID;
+  private String name;
 }

@@ -21,11 +21,11 @@ public class ServerMapperTest {
         Channel channel2 = Channel.builder().OID(789).channelname("Testchannel2").build();
         List<Channel> channelList = Arrays.asList(channel1, channel2);
 
-        Server server = Server.builder().OID(123).servername("Testserver").channels(channelList).build();
+        Server server = Server.builder().OID(123).name("Testserver").channels(channelList).build();
 
         ServerEntity entity = mapper.mapToJpa(server);
         assertThat(entity.getOID()).isEqualTo(server.getOID());
-        assertThat(entity.getServername()).isEqualTo(server.getServername());
+        assertThat(entity.getServername()).isEqualTo(server.getName());
         assertThat(entity.getChannels()).hasSize(channelList.size());
         assertThat(entity.getChannels()).allMatch(channelEntity -> channelList.stream().map(channel -> Long.valueOf(channel.getOID())).anyMatch(channelOid -> channelOid.equals(channelEntity.getOID())));
     }
@@ -40,7 +40,7 @@ public class ServerMapperTest {
 
         Server server = mapper.mapToDomain(entity);
         assertThat(server.getOID()).isEqualTo(entity.getOID());
-        assertThat(server.getServername()).isEqualTo(entity.getServername());
+        assertThat(server.getName()).isEqualTo(entity.getServername());
         assertThat(server.getChannels()).allMatch(channelEntity -> channelList.stream().map(channel -> Long.valueOf(channel.getOID())).anyMatch(channelOid -> channelOid.equals(channelEntity.getOID())));
     }
 

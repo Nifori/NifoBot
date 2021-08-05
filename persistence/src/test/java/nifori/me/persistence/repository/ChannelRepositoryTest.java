@@ -8,37 +8,44 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import static nifori.me.persistence.Testconstants.CHANNELNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 public class ChannelRepositoryTest {
 
-    @Autowired
-    ChannelRepository channelRepository;
+  @Autowired
+  ChannelRepository channelRepository;
 
-    @Test
-    public void testStoreOneEntity() {
-        Assertions.assertDoesNotThrow(() -> channelRepository.save(getEntity(CHANNELNAME)));
-    }
+  private final AtomicLong channeloid = new AtomicLong();
 
-    @Test
-    public void testStoredEntityHasId() {
-        ChannelEntity storedEntity = channelRepository.save(getEntity(CHANNELNAME));
-        assertThat(storedEntity).isNotNull();
-        assertThat(storedEntity.getOID()).isNotNull();
-    }
+  @Test
+  public void testStoreOneEntity() {
+    Assertions.assertDoesNotThrow(() -> channelRepository.save(getEntity(CHANNELNAME)));
+  }
 
-    @Test
-    public void testEntityIdIncreases() {
-        ChannelEntity firstEntity = channelRepository.save(getEntity(CHANNELNAME));
-        ChannelEntity secondEntity = channelRepository.save(getEntity("Second_Testchannel"));
+  @Test
+  public void testStoredEntityHasId() {
+    ChannelEntity storedEntity = channelRepository.save(getEntity(CHANNELNAME));
+    assertThat(storedEntity).isNotNull();
+    assertThat(storedEntity.getOID()).isNotNull();
+  }
 
-        assertThat(channelRepository.count()).isEqualTo(2);
-        assertThat(firstEntity.getOID()).isLessThan(secondEntity.getOID());
-    }
+  @Test
+  public void testEntityIdIncreases() {
+    ChannelEntity firstEntity = channelRepository.save(getEntity(CHANNELNAME));
+    ChannelEntity secondEntity = channelRepository.save(getEntity("Second_Testchannel"));
 
-    private ChannelEntity getEntity(String channelname) {
-        return ChannelEntity.builder().channelname(channelname).build();
-    }
+    assertThat(channelRepository.count()).isEqualTo(2);
+    assertThat(firstEntity.getOID()).isLessThan(secondEntity.getOID());
+  }
+
+  private ChannelEntity getEntity(String channelname) {
+    return ChannelEntity.builder()
+        .OID(channeloid.incrementAndGet())
+        .channelname(channelname)
+        .build();
+  }
 }

@@ -1,6 +1,8 @@
 package nifori.me.persistence.services;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -33,5 +35,12 @@ public class WarningService {
 
   public long countWarnings(long serverid, long userid) {
     return warningRepository.countByServerIdAndUserId(serverid, userid);
+  }
+
+  @Transactional
+  public List<Warning> getAllWarnings(long serverid, long userid) {
+    return warningRepository.findAllByOID(serverid, userid)
+        .map(mapper::mapToDomain)
+        .collect(Collectors.toList());
   }
 }

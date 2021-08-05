@@ -15,6 +15,10 @@
 
     <properties>
         <java.version>16</java.version>
+        <discord4j.version>3.1.7</discord4j.version>
+        <h2.version>1.4.200</h2.version>
+        <mariajdbc.version>2.7.2</mariajdbc.version>
+        <lombok.version>edge-SNAPSHOT</lombok.version>
     </properties>
 
     <modules>
@@ -23,23 +27,29 @@
         <module>domain</module>
         <module>persistence</module>
         <module>test</module>
+        <module>service</module>
     </modules>
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.4.200</version>
+                <version>${h2.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.discord4j</groupId>
                 <artifactId>discord4j-core</artifactId>
-                <version>3.1.7</version>
+                <version>${discord4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>edge-SNAPSHOT</version>
+                <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mariadb.jdbc</groupId>
+                <artifactId>mariadb-java-client</artifactId>
+                <version>${mariajdbc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

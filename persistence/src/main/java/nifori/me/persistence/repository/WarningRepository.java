@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public interface WarningRepository extends JpaRepository<WarningEntity, Long> {
 
@@ -15,4 +16,6 @@ public interface WarningRepository extends JpaRepository<WarningEntity, Long> {
   @Query("select count(w) from WarningEntity w where w.serveroid = :serverid AND w.useroid = :userid")
   long countByServerIdAndUserId(@Param("serverid") long serverid, @Param("userid") long userid);
 
+  @Query("select w from WarningEntity w where w.serveroid = :serverid AND w.useroid = :userid")
+  Stream<WarningEntity> findAllByOID(@Param("serverid") long serverid, @Param("userid") long userid);
 }

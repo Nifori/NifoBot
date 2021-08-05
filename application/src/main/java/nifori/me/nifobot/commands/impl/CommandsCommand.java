@@ -11,7 +11,11 @@ import lombok.extern.log4j.Log4j2;
 import nifori.me.nifobot.commands.Command;
 import nifori.me.nifobot.commands.CommandMap;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @Log4j2
@@ -29,7 +33,11 @@ public class CommandsCommand extends Command {
     final MessageChannel channel = event.getMessage()
         .getChannel()
         .block();
-    channel.createMessage(StringUtils.collectionToDelimitedString(commands.keySet(), "\n")).subscribe();
+    channel.createMessage(StringUtils.collectionToDelimitedString(commands.keySet()
+        .stream()
+        .sorted(Comparator.naturalOrder())
+        .collect(Collectors.toList()), "\n"))
+        .subscribe();
   }
 
 }

@@ -1,8 +1,6 @@
 package nifori.me.persistence.repository;
 
 import nifori.me.persistence.entities.ChannelEntity;
-import nifori.me.persistence.entities.ServerEntity;
-import nifori.me.persistence.repository.ChannelRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import static nifori.me.persistence.Testconstants.CHANNELNAME;
+import static nifori.me.persistence.TestConstants.CHANNELNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest

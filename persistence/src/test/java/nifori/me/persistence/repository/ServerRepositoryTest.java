@@ -10,8 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static nifori.me.persistence.Testconstants.CHANNELNAME;
-import static nifori.me.persistence.Testconstants.SERVERNAME;
+import static nifori.me.persistence.TestConstants.CHANNELNAME;
+import static nifori.me.persistence.TestConstants.SERVERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest

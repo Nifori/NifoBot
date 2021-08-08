@@ -1,5 +1,10 @@
 package nifori.me.persistence;
 
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+
+@SpringBootConfiguration
+@ComponentScan(basePackages = {"nifori.me.persistence"})
 public class TestConstants {
 
     public static final String SERVERNAME = "Testserver";

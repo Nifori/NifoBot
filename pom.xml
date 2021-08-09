@@ -14,7 +14,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <java.version>16</java.version>
+        <java.version>11</java.version>
         <discord4j.version>3.1.7</discord4j.version>
         <h2.version>1.4.200</h2.version>
         <mariajdbc.version>2.7.2</mariajdbc.version>

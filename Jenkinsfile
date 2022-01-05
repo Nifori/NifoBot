@@ -21,9 +21,6 @@ pipeline {
 			steps {			
 				echo 'Testing..'
 				sh 'mvn test'
-				sh 'ls'
-				junit skipPublishingChecks: true, testResults:'datamodel/target/surefire-reports/*.xml'
-				echo 'junit.. 2'
 				junit skipPublishingChecks: true, testResults:'**/target/surefire-reports/*.xml'
 			}
 		}

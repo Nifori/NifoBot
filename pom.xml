@@ -5,8 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>2.6.2</version>
     </parent>
     <groupId>nifori.me</groupId>
     <artifactId>nifobot</artifactId>
@@ -14,11 +13,11 @@
     <packaging>pom</packaging>
 
     <properties>
-        <java.version>11</java.version>
-        <discord4j.version>3.1.7</discord4j.version>
-        <h2.version>1.4.200</h2.version>
-        <mariajdbc.version>2.7.2</mariajdbc.version>
-        <lombok.version>edge-SNAPSHOT</lombok.version>
+        <java.version>17</java.version>
+        <discord4j.version>3.2.1</discord4j.version>
+        <h2.version>2.0.206</h2.version>
+        <mariajdbc.version>3.0.2-rc</mariajdbc.version>
+        <lombok.version>1.18.22</lombok.version>
     </properties>
 
     <modules>
@@ -79,11 +78,4 @@
             </exclusions>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>projectlombok.org</id>
-            <url>https://projectlombok.org/edge-releases</url>
-        </repository>
-    </repositories>
 </project>

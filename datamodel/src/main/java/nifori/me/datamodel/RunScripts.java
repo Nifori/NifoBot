@@ -5,9 +5,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import javax.sql.DataSource;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -36,7 +39,7 @@ public class RunScripts {
     }
 
     public RunScripts(DataSource ds, String PATH, String PATH_FOR_SYSTEM, String INSERT_CHECKPOINT_SQL,
-            String SELECT_CHECKPOINT_SQL) throws IOException, SQLException {
+                      String SELECT_CHECKPOINT_SQL) throws IOException, SQLException {
         this.PATH = PATH;
         this.PATH_FOR_SYSTEM = PATH_FOR_SYSTEM;
         this.INSERT_CHECKPOINT_SQL = INSERT_CHECKPOINT_SQL;
@@ -48,15 +51,17 @@ public class RunScripts {
     public void run(DataSource ds) throws IOException, SQLException {
         try (Connection con = ds.getConnection()) {
             validateSystemScripts(con);
+            Arrays.stream(resolver.getResources(PATH)).sorted(Comparator.comparing(Resource::getFilename)).forEach(script -> runScript(script, con));
+        }
+    }
 
-            for (Resource script : resolver.getResources(PATH)) {
-                log.info(script.getURI());
+    @SneakyThrows
+    private void runScript(Resource script, Connection con) {
+        log.info(script.getURI());
 
-                if (!checkAlreadyExecuted(con, script)) {
-                    ScriptUtils.executeSqlScript(con, script);
-                    insertScriptIntoCheckpoint(con, script);
-                }
-            }
+        if (!checkAlreadyExecuted(con, script)) {
+            ScriptUtils.executeSqlScript(con, script);
+            insertScriptIntoCheckpoint(con, script);
         }
     }
 

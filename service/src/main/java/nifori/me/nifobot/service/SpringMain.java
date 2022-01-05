@@ -38,7 +38,7 @@ public class SpringMain {
     @Autowired
     private GuildCreateEventHandler guildCreateEventHandler;
 
-    // t
+    // te
     @Bean
     public CommandLineRunner run(ApplicationContext ctx) {
         return (args) -> {

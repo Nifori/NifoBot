@@ -21,7 +21,10 @@ pipeline {
 			steps {			
 				echo 'Testing..'
 				sh 'mvn test'
-				junit './**/target/surefire-reports/*.xml'
+				sh 'ls'
+				junit 'datamodel/target/surefire-reports/*.xml'
+				echo 'junit.. 2'
+				junit '/**/target/surefire-reports/*.xml'
 			}
 		}
 		stage('Build') {

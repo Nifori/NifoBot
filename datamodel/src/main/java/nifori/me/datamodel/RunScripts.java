@@ -57,9 +57,9 @@ public class RunScripts {
 
     @SneakyThrows
     private void runScript(Resource script, Connection con) {
-        log.info(script.getURI());
 
         if (!checkAlreadyExecuted(con, script)) {
+            log.info("Executing {}", script.getFilename());
             ScriptUtils.executeSqlScript(con, script);
             insertScriptIntoCheckpoint(con, script);
         }

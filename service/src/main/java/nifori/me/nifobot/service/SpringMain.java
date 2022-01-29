@@ -1,5 +1,7 @@
 package nifori.me.nifobot.service;
 
+import discord4j.core.event.domain.message.ReactionAddEvent;
+import nifori.me.nifobot.EventHandler.ReactionAddEventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -37,6 +39,8 @@ public class SpringMain {
 
     @Autowired
     private GuildCreateEventHandler guildCreateEventHandler;
+    @Autowired
+    private ReactionAddEventHandler reactionAddEventHandler;
 
     // te
     @Bean
@@ -46,10 +50,11 @@ public class SpringMain {
             final DiscordClient client = DiscordClient.create(id);
             final GatewayDiscordClient gateway = client.login().block();
 
-            gateway.on(Event.class).subscribe(log::info);
+//            gateway.on(Event.class).subscribe(log::info);
 
             gateway.on(MessageCreateEvent.class).subscribe(messageCreateEventHandler::handleEvent);
             gateway.on(GuildCreateEvent.class).subscribe(guildCreateEventHandler::handleEvent);
+            gateway.on(ReactionAddEvent.class).subscribe(reactionAddEventHandler::handleEvent);
 
             gateway.onDisconnect().block();
         };

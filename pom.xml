@@ -17,8 +17,8 @@
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
 
         <discord4j.version>3.2.1</discord4j.version>
-        <h2.version>2.0.206</h2.version>
-        <mariajdbc.version>3.0.2-rc</mariajdbc.version>
+        <h2.version>2.1.210</h2.version>
+        <mariajdbc.version>3.0.3</mariajdbc.version>
         <lombok.version>1.18.22</lombok.version>
     </properties>
 

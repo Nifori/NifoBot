@@ -26,7 +26,7 @@ public class ChannelMapperTest {
   @Test
   public void testMapToDomain() {
     ChannelEntity entity = ChannelEntity.builder()
-        .OID(Long.valueOf(123))
+        .OID(123L)
         .channelname("Testname")
         .build();
 

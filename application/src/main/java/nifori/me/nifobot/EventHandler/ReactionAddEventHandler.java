@@ -20,41 +20,23 @@ public class ReactionAddEventHandler {
 
   public void handleEvent(ReactionAddEvent event) {
 
-    System.out.println("----------");
-    System.out.println(event);
-    System.out.println("----------");
-    System.out.println(event.getEmoji());
-    System.out.println("----------");
-    System.out.println(event.getEmoji()
-        .asEmojiData());
-    System.out.println("----------");
-    System.out.println(event.getEmoji()
-        .asUnicodeEmoji());
-    System.out.println("----------");
-    System.out.println(event.getEmoji()
-        .asCustomEmoji());
-    System.out.println("----------");
-    System.out.println();
-    System.out.println("----------");
+    event.getEmoji()
+        .asEmojiData()
+        .id()
+        .ifPresent(i -> {
 
-    reactionService.saveReaction(Reaction.builder()
-        .reactionid(Integer.toString(event.getEmoji()
-                .asEmojiData().hashCode()))
-        .build());
-
-    long messageid = event.getMessageId()
-        .asLong();
-    String reactionid = Integer.toString(event.getEmoji()
-        .asEmojiData().hashCode());
-
-    log.info("Searching for message {} and reaction {}", messageid, reactionid);
-    Optional<Reaction> reaction = reactionService.findReactionByMessageIdAndReactionId(messageid, reactionid);
-
-    reaction.ifPresent((reaction1) -> {
-      event.getMember()
-          .get()
-          .addRole(Snowflake.of(reaction1.getRoleid()));
-    });
+          long messageid = event.getMessageId()
+              .asLong();
+          log.info("Searching for message {} and reaction {}", messageid, i.asLong());
+          Optional<Reaction> reaction = reactionService.findReactionByMessageIdAndReactionId(messageid, i.asString());
+          reaction.ifPresent((reaction1) -> {
+            log.info("Role found");
+            event.getMember()
+                .get()
+                .addRole(Snowflake.of(reaction1.getRoleid()))
+                .subscribe();
+          });
+        });
 
   }
 

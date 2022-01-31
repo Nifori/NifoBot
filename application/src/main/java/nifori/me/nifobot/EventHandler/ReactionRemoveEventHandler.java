@@ -4,33 +4,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import discord4j.common.util.Snowflake;
-import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.event.domain.message.ReactionRemoveEvent;
+import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.User;
 import lombok.extern.log4j.Log4j2;
 import nifori.me.persistence.services.ReactionService;
 
 @Component
 @Log4j2
-public class ReactionAddEventHandler {
+public class ReactionRemoveEventHandler {
 
   @Autowired
   private ReactionService reactionService;
 
-  public void handleEvent(ReactionAddEvent event) {
+  public void handleEvent(ReactionRemoveEvent event) {
+
     event.getEmoji()
         .asEmojiData()
         .id()
         .ifPresent(emojiId -> {
           long messageId = event.getMessageId()
               .asLong();
+
           reactionService.findReactionByMessageIdAndReactionId(messageId, emojiId.asString())
               .ifPresent(reaction -> {
-                Member member = event.getMember()
-                    .get();
-                member.addRole(Snowflake.of(reaction.getRoleid()))
+                Guild guild = event.getGuild()
+                    .block();
+                User user = event.getUser()
+                    .block();
+                Member member = user.asMember(guild.getId())
+                    .block();
+                member.removeRole(Snowflake.of(reaction.getRoleid()))
                     .subscribe();
               });
         });
+
   }
 
 }

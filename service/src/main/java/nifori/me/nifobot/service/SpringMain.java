@@ -14,10 +14,12 @@ import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.guild.GuildCreateEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.event.domain.message.ReactionRemoveEvent;
 import lombok.extern.log4j.Log4j2;
 import nifori.me.nifobot.EventHandler.GuildCreateEventHandler;
 import nifori.me.nifobot.EventHandler.MessageCreateEventHandler;
 import nifori.me.nifobot.EventHandler.ReactionAddEventHandler;
+import nifori.me.nifobot.EventHandler.ReactionRemoveEventHandler;
 
 @SpringBootApplication(scanBasePackages = {"nifori.me"})
 @EnableJpaRepositories(basePackages = "nifori.me.persistence.repository")
@@ -38,6 +40,8 @@ public class SpringMain {
   private GuildCreateEventHandler guildCreateEventHandler;
   @Autowired
   private ReactionAddEventHandler reactionAddEventHandler;
+  @Autowired
+  private ReactionRemoveEventHandler reactionRemoveEventHandler;
 
   // te
   @Bean
@@ -49,13 +53,14 @@ public class SpringMain {
           .block();
 
       // gateway.on(Event.class).subscribe(log::info);
-
       gateway.on(MessageCreateEvent.class)
           .subscribe(messageCreateEventHandler::handleEvent);
       gateway.on(GuildCreateEvent.class)
           .subscribe(guildCreateEventHandler::handleEvent);
       gateway.on(ReactionAddEvent.class)
           .subscribe(reactionAddEventHandler::handleEvent);
+      gateway.on(ReactionRemoveEvent.class)
+          .subscribe(reactionRemoveEventHandler::handleEvent);
 
       gateway.onDisconnect()
           .block();

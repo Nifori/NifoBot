@@ -3,7 +3,6 @@ package nifori.me.persistence.mapper;
 import static nifori.me.persistence.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nifori.me.persistence.TestConstants;
 import org.junit.jupiter.api.Test;
 
 import nifori.me.domain.model.Warning;

@@ -1,21 +1,17 @@
 package nifori.me.nifobot.commands.impl;
 
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.channel.MessageChannel;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import nifori.me.nifobot.commands.Command;
 import nifori.me.nifobot.commands.CommandMap;
-
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 @Log4j2

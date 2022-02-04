@@ -4,16 +4,13 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import nifori.me.domain.model.Reaction;
 import nifori.me.persistence.entities.ReactionEntity;
 import nifori.me.persistence.mapper.ReactionMapper;
 import nifori.me.persistence.repository.ReactionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import nifori.me.domain.model.User;
-import nifori.me.persistence.entities.UserEntity;
-import nifori.me.persistence.mapper.UserMapper;
 
 @Component
 public class ReactionService {

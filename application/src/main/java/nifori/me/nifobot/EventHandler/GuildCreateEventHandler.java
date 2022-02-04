@@ -1,25 +1,45 @@
 package nifori.me.nifobot.EventHandler;
 
-import discord4j.core.event.domain.guild.GuildCreateEvent;
-import nifori.me.domain.model.Server;
-import nifori.me.persistence.services.ServerService;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import discord4j.core.event.domain.Event;
+import discord4j.core.event.domain.guild.GuildCreateEvent;
+import nifori.me.domain.model.Server;
+import nifori.me.persistence.services.ServerService;
 
 @Component
-public class GuildCreateEventHandler {
+public class GuildCreateEventHandler extends AbstractEventHandler {
 
-    @Autowired
-    private ServerService serverService;
+  @Autowired
+  private ServerService serverService;
 
-    public void handleEvent(GuildCreateEvent event) {
-        Optional<Server> serverById = serverService.getServerById(event.getGuild().getId().asLong());
-        if (serverById.isPresent()) return;
+  public GuildCreateEventHandler() {
+    super(GuildCreateEvent.class);
+  }
 
-        Server build = Server.builder().OID(event.getGuild().getId().asLong()).name(event.getGuild().getName()).build();
-        serverService.saveServer(build);
-    }
+  @Override
+  protected void executeAbstract(Event event) {
+    execute((GuildCreateEvent) event);
+  }
+
+  private void execute(GuildCreateEvent event) {
+    Optional<Server> serverById = serverService.getServerById(event.getGuild()
+        .getId()
+        .asLong());
+    if (serverById.isPresent())
+      return;
+
+    Server build = Server.builder()
+        .OID(event.getGuild()
+            .getId()
+            .asLong())
+        .name(event.getGuild()
+            .getName())
+        .build();
+    serverService.saveServer(build);
+  }
 
 }

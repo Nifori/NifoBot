@@ -3,8 +3,9 @@ package nifori.me.nifobot.commands;
 import java.util.HashMap;
 import java.util.List;
 
-import nifori.me.nifobot.commands.impl.CommandsCommand;
 import org.springframework.stereotype.Component;
+
+import nifori.me.nifobot.commands.impl.CommandsCommand;
 
 @Component
 public class CommandMap extends HashMap<String, Command> {

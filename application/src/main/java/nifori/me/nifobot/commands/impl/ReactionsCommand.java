@@ -38,19 +38,22 @@ public class ReactionsCommand extends Command {
         .split(":");
     Custom custom = Custom.custom(Snowflake.of(emojiContent[2]), emojiContent[1], "a".equals(emojiContent[0]));
 
-    Reaction reaction = Reaction.builder().reactionid(custom.getId().asString())        .messageoid(event.getMessage()
-                    .getReferencedMessage()
-                    .get()
-                    .getId()
-                    .asLong())
-            .serveroid(event.getGuildId()
-                    .get()
-                    .asLong())
-            .roleid(event.getMessage()
-                    .getRoleMentionIds()
-                    .get(0)
-                    .asLong())
-            .build();
+    Reaction reaction = Reaction.builder()
+        .reactionid(custom.getId()
+            .asString())
+        .messageoid(event.getMessage()
+            .getReferencedMessage()
+            .get()
+            .getId()
+            .asLong())
+        .serveroid(event.getGuildId()
+            .get()
+            .asLong())
+        .roleid(event.getMessage()
+            .getRoleMentionIds()
+            .get(0)
+            .asLong())
+        .build();
 
     reactionService.saveReaction(reaction);
 

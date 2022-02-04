@@ -1,12 +1,13 @@
 package nifori.me.persistence.repository;
 
-import nifori.me.persistence.entities.ServerEntity;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
+import nifori.me.persistence.entities.ServerEntity;
 
 public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
 

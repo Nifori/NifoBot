@@ -1,8 +1,5 @@
 package nifori.me.domain.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Data;
 

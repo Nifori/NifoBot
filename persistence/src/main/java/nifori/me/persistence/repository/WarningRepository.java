@@ -1,13 +1,13 @@
 package nifori.me.persistence.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-import nifori.me.persistence.entities.WarningEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
-import java.util.stream.Stream;
+import nifori.me.persistence.entities.WarningEntity;
 
 public interface WarningRepository extends JpaRepository<WarningEntity, Long> {
 

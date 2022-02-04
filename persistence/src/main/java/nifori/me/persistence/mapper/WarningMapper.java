@@ -1,8 +1,6 @@
 package nifori.me.persistence.mapper;
 
-import nifori.me.domain.model.Channel;
 import nifori.me.domain.model.Warning;
-import nifori.me.persistence.entities.ChannelEntity;
 import nifori.me.persistence.entities.WarningEntity;
 
 public class WarningMapper {

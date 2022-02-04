@@ -7,8 +7,8 @@ import lombok.Data;
 @Builder
 public class Channel {
 
-    private long OID;
-    private Server server;
-    private String channelname;
+  private long OID;
+  private Server server;
+  private String channelname;
 
 }

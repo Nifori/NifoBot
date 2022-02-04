@@ -1,9 +1,9 @@
 package nifori.me.persistence.mapper;
 
+import java.util.stream.Collectors;
+
 import nifori.me.domain.model.Server;
 import nifori.me.persistence.entities.ServerEntity;
-
-import java.util.stream.Collectors;
 
 public class ServerMapper {
 

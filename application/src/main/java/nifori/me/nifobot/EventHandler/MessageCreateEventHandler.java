@@ -3,6 +3,7 @@ package nifori.me.nifobot.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import discord4j.core.event.domain.Event;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import lombok.extern.log4j.Log4j2;
 import nifori.me.nifobot.commands.Command;
@@ -11,23 +12,23 @@ import nifori.me.persistence.services.ServerService;
 
 @Component
 @Log4j2
-public class MessageCreateEventHandler {
+public class MessageCreateEventHandler extends AbstractEventHandler {
 
   @Autowired
   private CommandMap commandMap;
-
   @Autowired
   private ServerService serverService;
 
-  public void handleEvent(MessageCreateEvent event) {
-    try {
-      executeEvent(event);
-    } catch (Exception e) {
-      log.error(e);
-    }
+  public MessageCreateEventHandler() {
+    super(MessageCreateEvent.class);
   }
 
-  private void executeEvent(MessageCreateEvent event) {
+  @Override
+  protected void executeAbstract(Event event) {
+    execute((MessageCreateEvent) event);
+  }
+
+  private void execute(MessageCreateEvent event) {
     if (event.getMember()
         .isEmpty()
         || event.getMember()

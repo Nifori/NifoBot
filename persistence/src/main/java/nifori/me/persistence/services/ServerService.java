@@ -1,14 +1,16 @@
 package nifori.me.persistence.services;
 
+import java.util.Optional;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import nifori.me.domain.model.Server;
 import nifori.me.persistence.entities.ServerEntity;
 import nifori.me.persistence.mapper.ServerMapper;
 import nifori.me.persistence.repository.ServerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Component
 public class ServerService {

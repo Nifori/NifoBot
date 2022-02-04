@@ -1,14 +1,12 @@
 package nifori.me.persistence.repository;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
-import nifori.me.persistence.entities.ReactionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import nifori.me.persistence.entities.WarningEntity;
+import nifori.me.persistence.entities.ReactionEntity;
 
 public interface ReactionRepository extends JpaRepository<ReactionEntity, Long> {
 

@@ -8,13 +8,13 @@ import nifori.me.nifobot.commands.Command;
 @Component
 public class RepostLiveCommand extends Command {
 
-    public RepostLiveCommand() {
-        super.trigger = "live";
-    }
+  public RepostLiveCommand() {
+    super.trigger = "live";
+  }
 
-    @Override
-    public void run(MessageCreateEvent event) {
-        System.out.println("Live!");
-    }
-    
+  @Override
+  public void run(MessageCreateEvent event) {
+    System.out.println("Live!");
+  }
+
 }

@@ -7,13 +7,9 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.channel.MessageChannel;
 import lombok.extern.log4j.Log4j2;
-import nifori.me.domain.model.Warning;
 import nifori.me.nifobot.commands.Command;
 import nifori.me.persistence.services.ServerService;
 import nifori.me.persistence.services.WarningService;
-import org.springframework.util.StringUtils;
-
-import java.util.List;
 
 @Component
 @Log4j2

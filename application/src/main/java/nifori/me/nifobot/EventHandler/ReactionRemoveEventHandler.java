@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.Event;
 import discord4j.core.event.domain.message.ReactionRemoveEvent;
 import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.Member;
@@ -13,12 +14,21 @@ import nifori.me.persistence.services.ReactionService;
 
 @Component
 @Log4j2
-public class ReactionRemoveEventHandler {
+public class ReactionRemoveEventHandler extends AbstractEventHandler {
 
   @Autowired
   private ReactionService reactionService;
 
-  public void handleEvent(ReactionRemoveEvent event) {
+  public ReactionRemoveEventHandler() {
+    super(ReactionRemoveEvent.class);
+  }
+
+  @Override
+  protected void executeAbstract(Event event) {
+    execute((ReactionRemoveEvent) event);
+  }
+
+  public void execute(ReactionRemoveEvent event) {
 
     event.getEmoji()
         .asEmojiData()

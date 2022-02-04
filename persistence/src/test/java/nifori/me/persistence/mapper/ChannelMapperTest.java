@@ -1,10 +1,11 @@
 package nifori.me.persistence.mapper;
 
-import nifori.me.domain.model.Channel;
-import nifori.me.persistence.entities.ChannelEntity;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import nifori.me.domain.model.Channel;
+import nifori.me.persistence.entities.ChannelEntity;
 
 public class ChannelMapperTest {
 

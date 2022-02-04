@@ -1,11 +1,13 @@
 package nifori.me.persistence.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -15,11 +17,11 @@ import javax.persistence.*;
 @Table(name = "CHANNEL_T01")
 public class ChannelEntity {
 
-    @Id
-    private Long OID;
+  @Id
+  private Long OID;
 
-    private String channelname;
+  private String channelname;
 
-    private Long ServerOID;
+  private Long ServerOID;
 
 }

@@ -1,5 +1,7 @@
 package nifori.me.nifobot.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -11,15 +13,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
-import discord4j.core.event.domain.guild.GuildCreateEvent;
-import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.event.domain.message.ReactionAddEvent;
-import discord4j.core.event.domain.message.ReactionRemoveEvent;
 import lombok.extern.log4j.Log4j2;
-import nifori.me.nifobot.EventHandler.GuildCreateEventHandler;
-import nifori.me.nifobot.EventHandler.MessageCreateEventHandler;
-import nifori.me.nifobot.EventHandler.ReactionAddEventHandler;
-import nifori.me.nifobot.EventHandler.ReactionRemoveEventHandler;
+import nifori.me.nifobot.EventHandler.AbstractEventHandler;
 
 @SpringBootApplication(scanBasePackages = {"nifori.me"})
 @EnableJpaRepositories(basePackages = "nifori.me.persistence.repository")
@@ -34,16 +29,8 @@ public class SpringMain {
   private String id;
 
   @Autowired
-  private MessageCreateEventHandler messageCreateEventHandler;
+  private List<AbstractEventHandler> eventHandler;
 
-  @Autowired
-  private GuildCreateEventHandler guildCreateEventHandler;
-  @Autowired
-  private ReactionAddEventHandler reactionAddEventHandler;
-  @Autowired
-  private ReactionRemoveEventHandler reactionRemoveEventHandler;
-
-  // te
   @Bean
   public CommandLineRunner run(ApplicationContext ctx) {
     return (args) -> {
@@ -52,15 +39,11 @@ public class SpringMain {
       final GatewayDiscordClient gateway = client.login()
           .block();
 
-      // gateway.on(Event.class).subscribe(log::info);
-      gateway.on(MessageCreateEvent.class)
-          .subscribe(messageCreateEventHandler::handleEvent);
-      gateway.on(GuildCreateEvent.class)
-          .subscribe(guildCreateEventHandler::handleEvent);
-      gateway.on(ReactionAddEvent.class)
-          .subscribe(reactionAddEventHandler::handleEvent);
-      gateway.on(ReactionRemoveEvent.class)
-          .subscribe(reactionRemoveEventHandler::handleEvent);
+      eventHandler.forEach(handler -> {
+        System.out.println(handler.getEventClass());
+        gateway.on(handler.getEventClass())
+            .subscribe(handler::handleEvent);
+      });
 
       gateway.onDisconnect()
           .block();

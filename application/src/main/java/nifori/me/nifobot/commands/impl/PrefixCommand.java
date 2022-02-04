@@ -1,14 +1,13 @@
 package nifori.me.nifobot.commands.impl;
 
-import nifori.me.persistence.services.ServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.channel.MessageChannel;
-import discord4j.rest.util.Permission;
 import lombok.extern.log4j.Log4j2;
 import nifori.me.nifobot.commands.Command;
+import nifori.me.persistence.services.ServerService;
 import reactor.core.publisher.Mono;
 
 @Component

@@ -29,7 +29,7 @@ pipeline {
 			    script {
 			        sh 'docker build -t nifobot-service:${BUILD_VERSION} --build-arg JAR_FILE=service/build/nifobot-service.jar .'
 			        sh 'docker build -t nifobot-datamodel:${BUILD_VERSION} --build-arg JAR_FILE=datamodel/build/nifobot-datamodel.jar .'
-			        if (GIT_LOCAL_BRANCH=='master') {
+			        if (${GIT_LOCAL_BRANCH}=='master') {
 				        sh 'docker build -t nifobot-service:latest --build-arg JAR_FILE=service/build/nifobot-service.jar .'
                         sh 'docker build -t nifobot-datamodel:latest --build-arg JAR_FILE=datamodel/build/nifobot-datamodel.jar .'
 			        }

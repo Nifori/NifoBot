@@ -12,16 +12,17 @@ pipeline {
                 )}"""
         }
 	stages {
-		stage('Test') {
-			steps {			
-				sh 'mvn test'
-				junit skipPublishingChecks: true, testResults:'**/target/surefire-reports/*.xml'
-			}
-		}
+// 		stage('Test') {
+// 			steps {
+// 				sh 'mvn test'
+// 				junit skipPublishingChecks: true, testResults:'**/target/surefire-reports/*.xml'
+// 			}
+// 		}
 		stage('Build') {
 			steps {
 				echo 'Building..'
 				sh 'mvn package -DskipTests'
+				sh 'printenv'
 				    sh 'echo $CV'
 				    sh 'echo ${CV}'
 				    sh 'echo ${env.CV}'

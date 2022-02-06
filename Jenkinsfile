@@ -26,11 +26,12 @@ pipeline {
 		}
         stage('Docker') {
 			steps {
-			    script {
-			        sh 'docker build -t nifobot-service:${BUILD_VERSION} --build-arg JAR_FILE=service/build/nifobot-service.jar .'
-// 				    docker.build("nifobot-service:${env.BUILD_VERSION}", "--build-arg JAR_FILE=service/build/nifobot-service.jar .")
-				    docker.build("nifobot-datamodel:latest", "--build-arg JAR_FILE=datamodel/build/nifobot-datamodel.jar .")
-			    }
+			    sh 'docker build -t nifobot-service:${BUILD_VERSION} --build-arg JAR_FILE=service/build/nifobot-service.jar .'
+			    sh 'docker build -t nifobot-datamodel:${BUILD_VERSION} --build-arg JAR_FILE=service/build/nifobot-datamodel.jar .'
+			}
+			when(GIT_LOCAL_BRANCH 'master'){
+			    sh 'docker build -t nifobot-service:latest --build-arg JAR_FILE=service/build/nifobot-service.jar .'
+                sh 'docker build -t nifobot-datamodel:latest --build-arg JAR_FILE=service/build/nifobot-datamodel.jar .'
 			}
 		}
 	}

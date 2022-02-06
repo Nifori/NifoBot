@@ -27,7 +27,7 @@ pipeline {
         stage('Docker') {
 			steps {
 			    script {
-				    docker.build("nifobot-service:${BUILD_VERSION}")
+				    docker.build("nifobot-service:latest")
 			    }
 			}
 		}

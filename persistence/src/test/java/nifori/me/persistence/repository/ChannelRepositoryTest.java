@@ -37,7 +37,7 @@ public class ChannelRepositoryTest {
     ChannelEntity firstEntity = channelRepository.save(getEntity(CHANNELNAME));
     ChannelEntity secondEntity = channelRepository.save(getEntity("Second_Testchannel"));
 
-    assertThat(channelRepository.count()).isEqualTo(1);
+    assertThat(channelRepository.count()).isEqualTo(2);
     assertThat(firstEntity.getOID()).isLessThan(secondEntity.getOID());
   }
 

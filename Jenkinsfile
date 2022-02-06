@@ -7,7 +7,7 @@ pipeline {
 	    environment {
             // Using returnStatus
             CV = """${sh(
-                    returnStatus: true,
+                    returnStdout: true,
                     script: 'head -n 1 CHANGELOG'
                 )}"""
         }

@@ -6,7 +6,7 @@ pipeline {
 	}
 	    environment {
             // Using returnStatus
-            VERSION = """${sh(
+            CV = """${sh(
                     returnStatus: true,
                     script: '$(head -n 1 CHANGELOG)'
                 )}"""
@@ -22,9 +22,9 @@ pipeline {
 			steps {
 				echo 'Building..'
 				sh 'mvn package -DskipTests'
-				    sh 'echo $VERSION'
-				    sh 'echo ${VERSION}'
-				    sh 'echo ${env.VERSION}'
+				    sh 'echo $CV'
+				    sh 'echo ${CV}'
+				    sh 'echo ${env.CV}'
 				sh 'docker build -t nifobot-service:${env.VERSION} --build-arg JAR_FILE=service/build/nifobot-service.jar .'
 			}
 		}

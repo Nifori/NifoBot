@@ -6,7 +6,9 @@ pipeline {
 	stages {
 		stage('Checkout'){
 			steps {
-				git 'https://github.com/Nifori/NifoBot'
+ 				git 'https://github.com/Nifori/NifoBot'
+                sh 'git fetch'
+				sh 'git pull'
 			}
 		}
 		stage('Check') {
@@ -30,5 +32,6 @@ pipeline {
 				sh 'mvn package -DskipTests'
 			}
 		}
+
 	}
 }

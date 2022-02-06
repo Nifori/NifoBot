@@ -6,9 +6,7 @@ pipeline {
 	stages {
 		stage('Checkout'){
 			steps {
- 				git 'https://github.com/Nifori/NifoBot'
-                sh 'git fetch'
-				sh 'git pull'
+ 				git url: 'https://github.com/Nifori/NifoBot' branch: GIT_BRANCH
 			}
 		}
 		stage('Check') {

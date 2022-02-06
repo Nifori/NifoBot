@@ -27,7 +27,8 @@ pipeline {
         stage('Docker') {
 			steps {
 			    script {
-				    docker.build("nifobot-service:${env.BUILD_VERSION}", "--build-arg JAR_FILE=service/build/nifobot-service.jar .")
+			        sh 'docker build -t nifobot-service:${BUILD_VERSION} --build-arg JAR_FILE=service/build/nifobot-service.jar .'
+// 				    docker.build("nifobot-service:${env.BUILD_VERSION}", "--build-arg JAR_FILE=service/build/nifobot-service.jar .")
 				    docker.build("nifobot-datamodel:latest", "--build-arg JAR_FILE=datamodel/build/nifobot-datamodel.jar .")
 			    }
 			}

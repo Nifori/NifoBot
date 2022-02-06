@@ -22,9 +22,14 @@ pipeline {
 			steps {
 				echo 'Building..'
 				sh 'mvn package -DskipTests'
-				sh 'docker build -t nifobot-service:${BUILD_VERSION} --build-arg JAR_FILE=service/build/nifobot-service.jar .'
 			}
 		}
-
+        stage('Docker') {
+			steps {
+			    script {
+				    docker.build("nifobot-service:${BUILD_VERSION}")
+			    }
+			}
+		}
 	}
 }

@@ -4,6 +4,13 @@ pipeline {
 		maven 'M3'
 		dockerTool 'D3'
 	}
+	    environment {
+            // Using returnStatus
+            VERSION = """${sh(
+                    returnStatus: true,
+                    script: '$(head -n 1 CHANGELOG)'
+                )}"""
+        }
 	stages {
 		stage('Test') {
 			steps {			
@@ -15,7 +22,6 @@ pipeline {
 			steps {
 				echo 'Building..'
 				sh 'mvn package -DskipTests'
-				sh 'export version=$(head -n 1 CHANGELOG)'
 				sh 'docker build -t nifobot-service:$version --build-arg JAR_FILE=service/build/nifobot-service.jar .'
 			}
 		}

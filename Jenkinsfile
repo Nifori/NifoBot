@@ -8,7 +8,7 @@ pipeline {
             // Using returnStatus
             CV = """${sh(
                     returnStatus: true,
-                    script: '$(head -n 1 CHANGELOG)'
+                    script: 'head -n 1 CHANGELOG'
                 )}"""
         }
 	stages {

@@ -2,6 +2,7 @@ pipeline {
 	agent any
 	tools {
 		maven 'M3'
+		docker 'D3'
 	}
 	stages {
 		stage('Test') {

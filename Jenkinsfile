@@ -32,8 +32,10 @@ pipeline {
 		}
 		stage('Docker master'){
 			when(GIT_LOCAL_BRANCH 'master'){
+			    steps {
         			    sh 'docker build -t nifobot-service:latest --build-arg JAR_FILE=service/build/nifobot-service.jar .'
                         sh 'docker build -t nifobot-datamodel:latest --build-arg JAR_FILE=service/build/nifobot-datamodel.jar .'
+			    }
         	}
 		}
 	}

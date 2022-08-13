@@ -1,6 +1,7 @@
 package nifori.me.nifobot.commands;
 
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import nifori.me.nifobot.feature.NBFeature;
 
 public abstract class Command {
 
@@ -10,5 +11,9 @@ public abstract class Command {
 
   public String getTrigger() {
     return trigger;
+  }
+
+  public NBFeature getFeature() {
+    return null;
   }
 }

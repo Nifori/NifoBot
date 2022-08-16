@@ -1,5 +1,15 @@
 package nifori.me.nifobot.commands.impl;
 
+import discord4j.common.util.Snowflake;
+import discord4j.core.object.PermissionOverwrite;
+import discord4j.core.object.entity.channel.VoiceChannel;
+import discord4j.core.spec.VoiceChannelCreateSpec;
+import discord4j.rest.util.PermissionSet;
+import nifori.me.domain.model.Channel;
+import nifori.me.domain.model.PortObservation;
+import nifori.me.persistence.services.ChannelService;
+import nifori.me.persistence.services.PortObservationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -15,7 +25,12 @@ import reactor.core.publisher.Mono;
 @Log4j2
 public class PortCommand extends Command {
 
-  NetStatUtil util = new NetStatUtil();
+  @Autowired
+  private ChannelService channelService;
+  @Autowired
+  private PortObservationService portObservationService;
+
+  private NetStatUtil util = new NetStatUtil();
 
   public PortCommand() {
     super.trigger = "port";
@@ -36,20 +51,73 @@ public class PortCommand extends Command {
             .contains(Permission.ADMINISTRATOR))) {
 
       String[] messageArguments = event.getMessage()
-              .getContent()
-              .split(" ");
+          .getContent()
+          .split(" ");
 
-      int connections = util.readConnections(Integer.parseInt(messageArguments[1]));
+      String subCommand = messageArguments[1];
+      int port = Integer.parseInt(messageArguments[2]);
 
-      channel.createMessage("Current connections: " + connections)
-          .onErrorResume(e -> Mono.empty())
-          .subscribe();
+      if (subCommand.toLowerCase()
+          .contains("check")) {
+        executeCheck(port, channel);
+      } else if (subCommand.toLowerCase()
+          .contains("observ")) {
+        executeObserv(event, messageArguments);
+      } else {
+        channel.createMessage(subCommand + " is no valid command. It has to be \"check\" or \"observ\"")
+            .onErrorResume(e -> Mono.empty())
+            .subscribe();
+      }
 
     } else {
       channel.createMessage("You do not have the permissions to use this command")
           .onErrorResume(e -> Mono.empty())
           .subscribe();
     }
+  }
+
+  private void executeObserv(MessageCreateEvent event, String[] messageArguments) {
+    String channelname = "Connections: 6";
+    Snowflake everyoneId = event.getGuild()
+        .block()
+        .getEveryoneRole()
+        .block()
+        .getId();
+    VoiceChannel createdChannel = event.getGuild()
+        .block()
+        .createVoiceChannel(VoiceChannelCreateSpec.builder()
+            .name(channelname)
+            .addPermissionOverwrite(
+                PermissionOverwrite.forRole(everyoneId, PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.all()))
+            .build())
+        .block()
+
+    ;
+
+    long channeloid = createdChannel.getId()
+        .asLong();
+    Channel channel = Channel.builder()
+        .OID(channeloid)
+        .channelname(channelname)
+        .build();
+    channelService.saveChannel(channel);
+
+    int port = Integer.parseInt(messageArguments[2]);
+    PortObservation portObservation = PortObservation.builder()
+        .channelOID(channeloid)
+        .channelNameTemplate(channelname)
+        .port(port)
+        .build();
+    portObservationService.savePortObservation(portObservation);
+
+  }
+
+  private void executeCheck(int port, MessageChannel messageChannel) {
+    int connections = util.readConnections(port);
+
+    messageChannel.createMessage("Current connections: " + connections)
+        .onErrorResume(e -> Mono.empty())
+        .subscribe();
   }
 
   @Override

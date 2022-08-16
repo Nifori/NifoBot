@@ -49,6 +49,11 @@
                 <artifactId>mariadb-java-client</artifactId>
                 <version>${mariajdbc.version}</version>
             </dependency>
+            <dependency>
+                <groupId>nifori.me</groupId>
+                <artifactId>nifobot-persistence</artifactId>
+                <version>0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -7,6 +7,7 @@ import discord4j.core.spec.VoiceChannelCreateSpec;
 import discord4j.rest.util.PermissionSet;
 import nifori.me.domain.model.Channel;
 import nifori.me.domain.model.PortObservation;
+import nifori.me.nifobot.ports.PortObservationUpdater;
 import nifori.me.persistence.services.ChannelService;
 import nifori.me.persistence.services.PortObservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class PortCommand extends Command {
   private ChannelService channelService;
   @Autowired
   private PortObservationService portObservationService;
+  @Autowired
+  private PortObservationUpdater updater;
 
   private NetStatUtil util = new NetStatUtil();
 
@@ -55,14 +58,16 @@ public class PortCommand extends Command {
           .split(" ");
 
       String subCommand = messageArguments[1];
-      int port = Integer.parseInt(messageArguments[2]);
 
       if (subCommand.toLowerCase()
           .contains("check")) {
-        executeCheck(port, channel);
+        executeCheck(messageArguments, channel);
       } else if (subCommand.toLowerCase()
           .contains("observ")) {
         executeObserv(event, messageArguments);
+      } else if (subCommand.toLowerCase()
+          .contains("update")) {
+        updater.update();
       } else {
         channel.createMessage(subCommand + " is no valid command. It has to be \"check\" or \"observ\"")
             .onErrorResume(e -> Mono.empty())
@@ -77,7 +82,11 @@ public class PortCommand extends Command {
   }
 
   private void executeObserv(MessageCreateEvent event, String[] messageArguments) {
-    String channelname = "Connections: 6";
+    String channelnametemplate = "Connections: {count}";
+    int port = Integer.parseInt(messageArguments[2]);
+    int connections = util.readConnections(port);
+    String channelname = channelnametemplate.replace("{count}", Integer.toString(connections));
+
     Snowflake everyoneId = event.getGuild()
         .block()
         .getEveryoneRole()
@@ -90,9 +99,7 @@ public class PortCommand extends Command {
             .addPermissionOverwrite(
                 PermissionOverwrite.forRole(everyoneId, PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.all()))
             .build())
-        .block()
-
-    ;
+        .block();
 
     long channeloid = createdChannel.getId()
         .asLong();
@@ -102,17 +109,17 @@ public class PortCommand extends Command {
         .build();
     channelService.saveChannel(channel);
 
-    int port = Integer.parseInt(messageArguments[2]);
     PortObservation portObservation = PortObservation.builder()
         .channelOID(channeloid)
-        .channelNameTemplate(channelname)
+        .channelNameTemplate(channelnametemplate)
         .port(port)
         .build();
     portObservationService.savePortObservation(portObservation);
 
   }
 
-  private void executeCheck(int port, MessageChannel messageChannel) {
+  private void executeCheck(String[] messageArguments, MessageChannel messageChannel) {
+    int port = Integer.parseInt(messageArguments[2]);
     int connections = util.readConnections(port);
 
     messageChannel.createMessage("Current connections: " + connections)

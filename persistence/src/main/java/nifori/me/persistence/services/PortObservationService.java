@@ -1,5 +1,6 @@
 package nifori.me.persistence.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -30,4 +31,10 @@ public class PortObservationService {
     return mapper.mapToDomain(portObservEntity);
   }
 
+  public List<PortObservation> getAllPortObservations() {
+    return portObservationRepository.findAll()
+        .stream()
+        .map(mapper::mapToDomain)
+        .toList();
+  }
 }

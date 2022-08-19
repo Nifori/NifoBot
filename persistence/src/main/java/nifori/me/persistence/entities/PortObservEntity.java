@@ -18,12 +18,10 @@ public class PortObservEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PORT_OBSERV_Q01")
   @SequenceGenerator(name = "PORT_OBSERV_Q01", allocationSize = 1)
-  private Long OID;
+  private long OID;
 
   private String channelnametemplate;
-
-  private Long channeloid;
-
+  private long channeloid;
   private int port;
 
 }

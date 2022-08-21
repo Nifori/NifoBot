@@ -22,6 +22,6 @@ public class ChannelEntity {
 
   private String channelname;
 
-  private Long ServerOID;
+  private Long serveroid;
 
 }

@@ -4,12 +4,13 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import nifori.me.domain.model.Channel;
 import nifori.me.persistence.entities.ChannelEntity;
 import nifori.me.persistence.mapper.ChannelMapper;
 import nifori.me.persistence.repository.ChannelRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class ChannelService {
@@ -20,14 +21,14 @@ public class ChannelService {
   private ChannelMapper mapper = new ChannelMapper();
 
   public Optional<Channel> getPortObservationById(long id) {
-    Optional<ChannelEntity> portObservEntity = channelRepository.findByOID(id);
-    return portObservEntity.map(mapper::mapToDomain);
+    Optional<ChannelEntity> channelEntity = channelRepository.findByOID(id);
+    return channelEntity.map(mapper::mapToDomain);
   }
 
   @Transactional
-  public Channel saveChannel(Channel warportObservationing) {
-    ChannelEntity portObservEntity = channelRepository.save(mapper.mapToJpa(warportObservationing));
-    return mapper.mapToDomain(portObservEntity);
+  public Channel saveChannel(Channel channel) {
+    ChannelEntity channelEntity = channelRepository.save(mapper.mapToJpa(channel));
+    return mapper.mapToDomain(channelEntity);
   }
 
 }

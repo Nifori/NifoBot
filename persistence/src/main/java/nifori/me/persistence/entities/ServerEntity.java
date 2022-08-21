@@ -1,8 +1,8 @@
 package nifori.me.persistence.entities;
 
-import java.util.List;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,8 +22,5 @@ public class ServerEntity {
 
   private String servername;
   private String prefix;
-
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "ServerOID")
-  private List<ChannelEntity> channels;
 
 }

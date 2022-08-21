@@ -1,37 +1,37 @@
 package nifori.me.nifobot.ports;
 
-import discord4j.common.util.Snowflake;
-import discord4j.core.GatewayDiscordClient;
-import discord4j.core.object.entity.channel.VoiceChannel;
-import discord4j.core.spec.VoiceChannelEditMono;
-import discord4j.core.spec.VoiceChannelEditSpec;
-import discord4j.discordjson.json.ChannelData;
-import discord4j.discordjson.json.ChannelModifyRequest;
-import lombok.RequiredArgsConstructor;
-import nifori.me.persistence.services.PortObservationService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import discord4j.common.util.Snowflake;
+import discord4j.core.GatewayDiscordClient;
+import discord4j.core.object.entity.channel.VoiceChannel;
+import discord4j.core.spec.VoiceChannelEditSpec;
+import lombok.RequiredArgsConstructor;
+import nifori.me.persistence.services.PortObservationService;
+
 @Component
 @RequiredArgsConstructor
+@EnableAsync
+@Log4j2
 public class PortObservationUpdater {
 
   private final PortObservationService portObservationService;
   private NetStatUtil netStatUtil = new NetStatUtil();
   private GatewayDiscordClient gateway;
 
-  @Scheduled(fixedRate = 30000)
+  @Async
+  @Scheduled(fixedRate = 300000)
   public void update() {
 
     if (gateway == null)
       return;
 
-    System.out.println("updating");
     portObservationService.getAllPortObservations()
         .forEach(observation -> {
-          System.out.println(observation);
           VoiceChannel voiceChannel = gateway.getChannelById(Snowflake.of(observation.getChannelOID()))
               .cast(VoiceChannel.class)
               .block();
@@ -39,7 +39,7 @@ public class PortObservationUpdater {
           int connections = netStatUtil.readConnections(observation.getPort());
           String newName = observation.getChannelNameTemplate()
               .replace("{count}", Integer.toString(connections));
-          System.out.println(newName);
+          log.info("Updating channel {} to {}", observation, newName);
           voiceChannel.edit(VoiceChannelEditSpec.builder()
               .name(newName)
               .build())

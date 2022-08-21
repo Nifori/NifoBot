@@ -2,6 +2,7 @@ package nifori.me.nifobot.commands.impl;
 
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.PermissionOverwrite;
+import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.channel.VoiceChannel;
 import discord4j.core.spec.VoiceChannelCreateSpec;
 import discord4j.rest.util.PermissionSet;
@@ -25,6 +26,8 @@ import reactor.core.publisher.Mono;
 @Component
 @Log4j2
 public class PortCommand extends Command {
+
+  private static final String DEFAULT_TEMPLATE = "Connections: {count}";
 
   @Autowired
   private ChannelService channelService;
@@ -57,16 +60,13 @@ public class PortCommand extends Command {
           .getContent()
           .split(" ");
 
-      String subCommand = messageArguments[1];
+      String subCommand = messageArguments[1].toLowerCase();
 
-      if (subCommand.toLowerCase()
-          .contains("check")) {
+      if (subCommand.contains("check")) {
         executeCheck(messageArguments, channel);
-      } else if (subCommand.toLowerCase()
-          .contains("observ")) {
+      } else if (subCommand.contains("observ")) {
         executeObserv(event, messageArguments);
-      } else if (subCommand.toLowerCase()
-          .contains("update")) {
+      } else if (subCommand.contains("update")) {
         updater.update();
       } else {
         channel.createMessage(subCommand + " is no valid command. It has to be \"check\" or \"observ\"")
@@ -82,36 +82,39 @@ public class PortCommand extends Command {
   }
 
   private void executeObserv(MessageCreateEvent event, String[] messageArguments) {
-    String channelnametemplate = "Connections: {count}";
+
     int port = Integer.parseInt(messageArguments[2]);
     int connections = util.readConnections(port);
-    String channelname = channelnametemplate.replace("{count}", Integer.toString(connections));
 
-    Snowflake everyoneId = event.getGuild()
-        .block()
-        .getEveryoneRole()
-        .block()
-        .getId();
-    VoiceChannel createdChannel = event.getGuild()
-        .block()
-        .createVoiceChannel(VoiceChannelCreateSpec.builder()
-            .name(channelname)
-            .addPermissionOverwrite(
-                PermissionOverwrite.forRole(everyoneId, PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.all()))
-            .build())
+    Guild guild = event.getGuild()
         .block();
 
-    long channeloid = createdChannel.getId()
+    String channelNameTemplate = getChannelNameTemplate(messageArguments);
+    String channelName = channelNameTemplate.replace("{count}", Integer.toString(connections));
+
+    Snowflake everyoneId = guild.getEveryoneRole()
+        .block()
+        .getId();
+    VoiceChannel createdChannel = guild.createVoiceChannel(VoiceChannelCreateSpec.builder()
+        .name(channelName)
+        .addPermissionOverwrite(
+            PermissionOverwrite.forRole(everyoneId, PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.all()))
+        .build())
+        .block();
+
+    long channelOID = createdChannel.getId()
         .asLong();
     Channel channel = Channel.builder()
-        .OID(channeloid)
-        .channelname(channelname)
+        .OID(channelOID)
+        .channelname(channelName)
+        .serverOID(guild.getId()
+            .asLong())
         .build();
     channelService.saveChannel(channel);
 
     PortObservation portObservation = PortObservation.builder()
-        .channelOID(channeloid)
-        .channelNameTemplate(channelnametemplate)
+        .channelOID(channelOID)
+        .channelNameTemplate(channelNameTemplate)
         .port(port)
         .build();
     portObservationService.savePortObservation(portObservation);
@@ -125,6 +128,17 @@ public class PortCommand extends Command {
     messageChannel.createMessage("Current connections: " + connections)
         .onErrorResume(e -> Mono.empty())
         .subscribe();
+  }
+
+  private String getChannelNameTemplate(String[] messageArguments) {
+
+    StringBuilder builder = new StringBuilder();
+    for (int i = 3; i < messageArguments.length; i++) {
+      builder.append(messageArguments[i]);
+      builder.append(" ");
+    }
+
+    return builder.isEmpty() ? DEFAULT_TEMPLATE : builder.toString();
   }
 
   @Override

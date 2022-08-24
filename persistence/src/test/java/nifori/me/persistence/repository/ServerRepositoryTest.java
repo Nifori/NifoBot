@@ -4,7 +4,6 @@ import static nifori.me.persistence.TestConstants.CHANNELNAME;
 import static nifori.me.persistence.TestConstants.SERVERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Collections;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.jupiter.api.Assertions;
@@ -53,7 +52,6 @@ public class ServerRepositoryTest {
     return ServerEntity.builder()
         .OID(serveroid.incrementAndGet())
         .servername(servername)
-        .channels(Collections.singletonList(channel))
         .build();
   }
 }

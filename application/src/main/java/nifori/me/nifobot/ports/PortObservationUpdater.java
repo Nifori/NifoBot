@@ -24,7 +24,7 @@ public class PortObservationUpdater {
   private GatewayDiscordClient gateway;
 
   @Async
-  @Scheduled(fixedRate = 300000)
+  @Scheduled(fixedRateString = "${port_observation.refresh_rate:300000}")
   public void update() {
 
     if (gateway == null)

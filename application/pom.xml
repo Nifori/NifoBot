@@ -23,12 +23,10 @@
         <dependency>
             <groupId>nifori.me</groupId>
             <artifactId>nifobot-persistence</artifactId>
-            <version>0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>nifori.me</groupId>
             <artifactId>nifobot-common</artifactId>
-            <version>0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

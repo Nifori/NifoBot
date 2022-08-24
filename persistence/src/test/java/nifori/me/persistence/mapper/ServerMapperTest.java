@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import nifori.me.domain.model.Channel;
 import nifori.me.domain.model.Server;
-import nifori.me.persistence.entities.ChannelEntity;
 import nifori.me.persistence.entities.ServerEntity;
 
 public class ServerMapperTest {
@@ -31,42 +30,23 @@ public class ServerMapperTest {
     Server server = Server.builder()
         .OID(123)
         .name("Testserver")
-        .channels(channelList)
         .build();
 
     ServerEntity entity = mapper.mapToJpa(server);
     assertThat(entity.getOID()).isEqualTo(server.getOID());
     assertThat(entity.getServername()).isEqualTo(server.getName());
-    assertThat(entity.getChannels()).hasSize(channelList.size());
-    assertThat(entity.getChannels()).allMatch(channelEntity -> channelList.stream()
-        .map(channel -> Long.valueOf(channel.getOID()))
-        .anyMatch(channelOid -> channelOid.equals(channelEntity.getOID())));
   }
 
   @Test
   public void testMapToDomain() {
-    ChannelEntity channel1 = ChannelEntity.builder()
-        .OID(Long.valueOf(456))
-        .channelname("Testchannel1")
-        .build();
-    ChannelEntity channel2 = ChannelEntity.builder()
-        .OID(Long.valueOf(789))
-        .channelname("Testchannel2")
-        .build();
-    List<ChannelEntity> channelList = Arrays.asList(channel1, channel2);
-
     ServerEntity entity = ServerEntity.builder()
         .OID(Long.valueOf(123))
         .servername("Testserver")
-        .channels(channelList)
         .build();
 
     Server server = mapper.mapToDomain(entity);
     assertThat(server.getOID()).isEqualTo(entity.getOID());
     assertThat(server.getName()).isEqualTo(entity.getServername());
-    assertThat(server.getChannels()).allMatch(channelEntity -> channelList.stream()
-        .map(channel -> Long.valueOf(channel.getOID()))
-        .anyMatch(channelOid -> channelOid.equals(channelEntity.getOID())));
   }
 
 }

@@ -8,7 +8,7 @@ import lombok.Data;
 public class Channel {
 
   private long OID;
-  private Server server;
+  private long serverOID;
   private String channelname;
 
 }

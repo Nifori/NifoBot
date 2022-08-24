@@ -1,8 +1,5 @@
 package nifori.me.domain.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,6 +13,4 @@ public class Server {
   @Builder.Default
   private String prefix = "!";
 
-  @Builder.Default
-  private List<Channel> channels = new ArrayList<>();
 }

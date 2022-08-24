@@ -9,6 +9,7 @@ public class ChannelMapper {
     return ChannelEntity.builder()
         .OID(channel.getOID())
         .channelname(channel.getChannelname())
+        .serveroid(channel.getServerOID())
         .build();
   }
 
@@ -16,6 +17,7 @@ public class ChannelMapper {
     return Channel.builder()
         .OID(channelEntity.getOID())
         .channelname(channelEntity.getChannelname())
+        .serverOID(channelEntity.getServeroid())
         .build();
   }
 }

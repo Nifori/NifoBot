@@ -16,10 +16,13 @@
         <java.version>17</java.version>
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
 
+        <nifobot.version>0-SNAPSHOT</nifobot.version>
         <discord4j.version>3.2.2</discord4j.version>
         <h2.version>2.1.210</h2.version>
         <mariajdbc.version>3.0.4</mariajdbc.version>
+        <postgresql.version>42.4.2</postgresql.version>
         <lombok.version>1.18.22</lombok.version>
+        <togglz.version>3.1.2</togglz.version>
     </properties>
 
     <modules>
@@ -29,6 +32,7 @@
         <module>persistence</module>
         <module>test</module>
         <module>service</module>
+        <module>common</module>
     </modules>
 
     <dependencyManagement>
@@ -43,10 +47,51 @@
                 <artifactId>discord4j-core</artifactId>
                 <version>${discord4j.version}</version>
             </dependency>
+
+            <!--Togglz-->
+            <dependency>
+                <groupId>org.togglz</groupId>
+                <artifactId>togglz-core</artifactId>
+                <version>${togglz.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.togglz</groupId>
+                <artifactId>togglz-spring-boot-starter</artifactId>
+                <version>${togglz.version}</version>
+            </dependency>
+
+            <!--JDBC-Dependencies-->
             <dependency>
                 <groupId>org.mariadb.jdbc</groupId>
                 <artifactId>mariadb-java-client</artifactId>
                 <version>${mariajdbc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
+            </dependency>
+
+            <!--NifoBot-Dependencies-->
+            <dependency>
+                <groupId>nifori.me</groupId>
+                <artifactId>nifobot-persistence</artifactId>
+                <version>${nifobot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>nifori.me</groupId>
+                <artifactId>nifobot-common</artifactId>
+                <version>${nifobot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>nifori.me</groupId>
+                <artifactId>nifobot-domain</artifactId>
+                <version>${nifobot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>nifori.me</groupId>
+                <artifactId>nifobot-application</artifactId>
+                <version>${nifobot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

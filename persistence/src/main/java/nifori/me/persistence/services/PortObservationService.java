@@ -5,12 +5,13 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import nifori.me.domain.model.PortObservation;
 import nifori.me.persistence.entities.PortObservEntity;
 import nifori.me.persistence.mapper.PortObservMapper;
 import nifori.me.persistence.repository.PortObservationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class PortObservationService {
@@ -26,8 +27,8 @@ public class PortObservationService {
   }
 
   @Transactional
-  public PortObservation savePortObservation(PortObservation warportObservationing) {
-    PortObservEntity portObservEntity = portObservationRepository.save(mapper.mapToJpa(warportObservationing));
+  public PortObservation savePortObservation(PortObservation portObservation) {
+    PortObservEntity portObservEntity = portObservationRepository.save(mapper.mapToJpa(portObservation));
     return mapper.mapToDomain(portObservEntity);
   }
 

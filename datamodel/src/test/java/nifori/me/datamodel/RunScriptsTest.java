@@ -21,9 +21,6 @@ public class RunScriptsTest {
 
   private static final String PATH = "classpath:testsql/scripts/*.sql";
   private static final String PATH_FOR_SYSTEM = "classpath:testsql/system/*.sql";
-  private static final String INSERT_CHECKPOINT_SQL =
-      "INSERT INTO DATAMODEL_CHECKPOINT_T01(OID, ScriptOID, ExecutionTime) VALUES (NEXT VALUE FOR DATAMODEL_CHECKPOINT_Q01, ?, CURRENT_TIMESTAMP)";
-  private static final String SELECT_CHECKPOINT_SQL = "SELECT * FROM DATAMODEL_CHECKPOINT_T01 WHERE ScriptOID = ?";
 
   @Autowired
   private DataSource ds;
@@ -47,7 +44,7 @@ public class RunScriptsTest {
 
   @Test
   public void runTestScripts() throws SQLException {
-    assertDoesNotThrow(() -> new RunScripts(ds, PATH, PATH_FOR_SYSTEM, INSERT_CHECKPOINT_SQL, SELECT_CHECKPOINT_SQL));
+    assertDoesNotThrow(() -> new RunScripts(ds, PATH, PATH_FOR_SYSTEM));
 
     assertThat(JdbcTestUtils.countRowsInTable(template, "TEST")).isEqualTo(5);
     assertThat(JdbcTestUtils.countRowsInTable(template, "DATAMODEL_CHECKPOINT_T01")).isEqualTo(6);

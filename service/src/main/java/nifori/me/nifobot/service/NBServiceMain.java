@@ -50,7 +50,6 @@ public class NBServiceMain {
       portObservationUpdater.setGateway(gateway);
 
       eventHandler.forEach(handler -> {
-        System.out.println(handler.getEventClass());
         gateway.on(handler.getEventClass())
             .subscribe(handler::handleEvent);
       });

@@ -11,6 +11,7 @@ public class PortObservMapper {
         .channelnametemplate(portObservation.getChannelNameTemplate())
         .channeloid(portObservation.getChannelOID())
         .port(portObservation.getPort())
+        .lastcount(portObservation.getLastCount())
         .build();
   }
 
@@ -20,6 +21,7 @@ public class PortObservMapper {
         .channelNameTemplate(portObservEntity.getChannelnametemplate())
         .channelOID(portObservEntity.getChanneloid())
         .port(portObservEntity.getPort())
+        .lastCount(portObservEntity.getLastcount())
         .build();
   }
 }

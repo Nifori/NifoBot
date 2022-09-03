@@ -23,5 +23,5 @@ public class PortObservEntity {
   private String channelnametemplate;
   private long channeloid;
   private int port;
-
+  private int lastcount;
 }

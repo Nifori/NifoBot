@@ -25,8 +25,13 @@ import lombok.extern.log4j.Log4j2;
 @Setter
 public class RunScripts {
 
-  private String INSERT_CHECKPOINT_SQL =
+  private String INSERT_CHECKPOINT_SQL_MARIADB =
       "INSERT INTO DATAMODEL_CHECKPOINT_T01(OID, ScriptOID, ExecutionTime) VALUES (NEXTVAL(DATAMODEL_CHECKPOINT_Q01), ?, CURRENT_TIMESTAMP)";
+  private String INSERT_CHECKPOINT_SQL_POSTGRES =
+      "INSERT INTO DATAMODEL_CHECKPOINT_T01(OID, ScriptOID, ExecutionTime) VALUES (NEXTVAL('DATAMODEL_CHECKPOINT_Q01'), ?, CURRENT_TIMESTAMP)";
+  private String INSERT_CHECKPOINT_SQL_H2 =
+      "INSERT INTO DATAMODEL_CHECKPOINT_T01(OID, ScriptOID, ExecutionTime) VALUES (NEXT VALUE FOR DATAMODEL_CHECKPOINT_Q01, ?, CURRENT_TIMESTAMP)";
+
   private String SELECT_CHECKPOINT_SQL = "SELECT * FROM DATAMODEL_CHECKPOINT_T01 WHERE ScriptOID = ?";
 
   private String PATH = "classpath:sql/scripts/*.sql";
@@ -39,12 +44,9 @@ public class RunScripts {
     run(ds);
   }
 
-  public RunScripts(DataSource ds, String PATH, String PATH_FOR_SYSTEM, String INSERT_CHECKPOINT_SQL,
-      String SELECT_CHECKPOINT_SQL) throws IOException, SQLException {
+  public RunScripts(DataSource ds, String PATH, String PATH_FOR_SYSTEM) throws IOException, SQLException {
     this.PATH = PATH;
     this.PATH_FOR_SYSTEM = PATH_FOR_SYSTEM;
-    this.INSERT_CHECKPOINT_SQL = INSERT_CHECKPOINT_SQL;
-    this.SELECT_CHECKPOINT_SQL = SELECT_CHECKPOINT_SQL;
 
     run(ds);
   }
@@ -69,10 +71,28 @@ public class RunScripts {
   }
 
   private void insertScriptIntoCheckpoint(Connection con, Resource script) throws SQLException {
-    try (PreparedStatement insertStmt = con.prepareStatement(INSERT_CHECKPOINT_SQL)) {
+    try (PreparedStatement insertStmt = con.prepareStatement(getInsertSqlForDriver(con))) {
       insertStmt.setString(1, getScriptID(script));
       insertStmt.executeUpdate();
     }
+  }
+
+  private String getInsertSqlForDriver(Connection con) throws SQLException {
+
+    switch (con.getMetaData()
+        .getDriverName()) {
+
+      case "MariaDB Connector/J":
+        return INSERT_CHECKPOINT_SQL_MARIADB;
+      case "PostgreSQL JDBC Driver":
+        return INSERT_CHECKPOINT_SQL_POSTGRES;
+      case "H2 JDBC Driver":
+        return INSERT_CHECKPOINT_SQL_H2;
+      default:
+        throw new IllegalArgumentException(con.getMetaData()
+            .getDriverName() + " is no known sql driver");
+    }
+
   }
 
   private boolean checkAlreadyExecuted(Connection con, Resource script) throws SQLException {

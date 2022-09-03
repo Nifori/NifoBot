@@ -25,7 +25,7 @@ public class PortObservationUpdater {
 
   @Scheduled(fixedRateString = "${port_observation.refresh_rate:300000}")
   public void update() {
-    log.info("checking connections");
+    log.info("Checking Connections");
 
     if (gateway == null)
       return;
@@ -50,18 +50,21 @@ public class PortObservationUpdater {
 
   private void renameChannel(PortObservation observation, int connections) {
     try {
-      VoiceChannel voiceChannel = gateway.getChannelById(Snowflake.of(observation.getChannelOID()))
-          .cast(VoiceChannel.class)
-          .block();
+
       String newName = observation.getChannelNameTemplate()
           .replace("{count}", Integer.toString(connections));
       log.info("Updating channel {} to {}", observation, newName);
 
-      voiceChannel.edit(VoiceChannelEditSpec.builder()
-          .name(newName)
-          .build())
-          .subscribe()
+      gateway.getChannelById(Snowflake.of(observation.getChannelOID()))
+          .cast(VoiceChannel.class)
+          .doOnError(log::error)
+          .subscribe(vc -> vc.edit(VoiceChannelEditSpec.builder()
+              .name(newName)
+              .build())
+              .subscribe()
+              .dispose(), log::error)
           .dispose();
+
     } catch (Exception e) {
       log.error(e, e);
     }

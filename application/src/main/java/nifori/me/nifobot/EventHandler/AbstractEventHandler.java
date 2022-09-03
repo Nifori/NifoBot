@@ -20,7 +20,7 @@ public abstract class AbstractEventHandler {
         executeAbstract(event);
       }
     } catch (Exception e) {
-      log.error(e);
+      log.error(e, e);
     }
   }
 

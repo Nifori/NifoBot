@@ -3,10 +3,11 @@ package nifori.me.persistence.mapper;
 import static nifori.me.persistence.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import nifori.me.persistence.nifobot.mapper.WarningMapper;
 import org.junit.jupiter.api.Test;
 
 import nifori.me.domain.model.Warning;
-import nifori.me.persistence.entities.WarningEntity;
+import nifori.me.persistence.nifobot.entities.WarningEntity;
 
 public class WarningMapperTest {
 

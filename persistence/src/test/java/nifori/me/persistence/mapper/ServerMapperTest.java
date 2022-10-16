@@ -5,11 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.List;
 
+import nifori.me.persistence.nifobot.mapper.ServerMapper;
 import org.junit.jupiter.api.Test;
 
 import nifori.me.domain.model.Channel;
 import nifori.me.domain.model.Server;
-import nifori.me.persistence.entities.ServerEntity;
+import nifori.me.persistence.nifobot.entities.ServerEntity;
 
 public class ServerMapperTest {
 

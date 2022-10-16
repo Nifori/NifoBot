@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import nifori.me.domain.model.PortObservation;
-import nifori.me.persistence.services.PortObservationService;
+import nifori.me.persistence.nifobot.services.PortObservationService;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class PortObservationUpdater {
   @Setter
   private GatewayDiscordClient gateway;
 
-  @Scheduled(fixedRateString = "${port_observation.refresh_rate:300000}")
+  @Scheduled(fixedRateString = "${portobservation.refresh_rate:300000}")
   public void update() {
     log.info("Checking Connections");
 

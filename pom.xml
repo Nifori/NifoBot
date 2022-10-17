@@ -23,6 +23,7 @@
         <postgresql.version>42.4.2</postgresql.version>
         <lombok.version>1.18.22</lombok.version>
         <togglz.version>3.1.2</togglz.version>
+        <mssql.version>11.2.1.jre17</mssql.version>
     </properties>
 
     <modules>
@@ -70,6 +71,11 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.sqlserver</groupId>
+                <artifactId>mssql-jdbc</artifactId>
+                <version>${mssql.version}</version>
             </dependency>
 
             <!--NifoBot-Dependencies-->

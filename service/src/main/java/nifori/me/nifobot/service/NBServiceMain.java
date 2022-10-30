@@ -11,12 +11,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.togglz.core.manager.FeatureManager;
 
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import lombok.extern.log4j.Log4j2;
 import nifori.me.nifobot.EventHandler.AbstractEventHandler;
+import nifori.me.nifobot.playernames.PlayerNamesUpdater;
 import nifori.me.nifobot.ports.PortObservationUpdater;
 
 @SpringBootApplication(scanBasePackages = {"nifori.me"})
@@ -34,11 +34,12 @@ public class NBServiceMain {
 
   @Autowired
   private List<AbstractEventHandler> eventHandler;
-  @Autowired
-  private FeatureManager featureManager;
 
   @Autowired
   private PortObservationUpdater portObservationUpdater;
+
+  @Autowired
+  private PlayerNamesUpdater playerNamesUpdater;
 
   @Bean
   public CommandLineRunner run(ApplicationContext ctx) {
@@ -48,6 +49,7 @@ public class NBServiceMain {
           .block();
 
       portObservationUpdater.setGateway(gateway);
+      playerNamesUpdater.setGateway(gateway);
 
       eventHandler.forEach(handler -> {
         gateway.on(handler.getEventClass())

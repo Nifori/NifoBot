@@ -23,7 +23,7 @@ public class PortObservationUpdater {
   @Setter
   private GatewayDiscordClient gateway;
 
-  @Scheduled(fixedRateString = "${portobservation.refresh_rate:300000}")
+  @Scheduled(fixedRateString = "${portobservation.refreshrate:300000}")
   public void update() {
     log.info("Checking Connections");
 
@@ -41,11 +41,6 @@ public class PortObservationUpdater {
 
         });
 
-  }
-
-  private void updateObservation(PortObservation observation, int connections) {
-    observation.setLastCount(connections);
-    portObservationService.savePortObservation(observation);
   }
 
   private void renameChannel(PortObservation observation, int connections) {
@@ -68,6 +63,11 @@ public class PortObservationUpdater {
     } catch (Exception e) {
       log.error(e, e);
     }
+  }
+
+  private void updateObservation(PortObservation observation, int connections) {
+    observation.setLastCount(connections);
+    portObservationService.savePortObservation(observation);
   }
 
 }

@@ -15,9 +15,13 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
+
 @Configuration
 @EnableJpaRepositories(basePackages = "nifori.me.persistence.nifobot", entityManagerFactoryRef = "nifobotEntityManager",
     transactionManagerRef = "nifobotTransactionManager")
+@Log4j2
 public class NifoBotPersistenceConfiguration {
 
   @Bean
@@ -36,17 +40,29 @@ public class NifoBotPersistenceConfiguration {
 
   @Bean
   @Primary
+  @SneakyThrows
   public LocalContainerEntityManagerFactoryBean nifobotEntityManager() {
     LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-    em.setDataSource(nifobotDataSource());
+    DataSource ds = nifobotDataSource();
+    em.setDataSource(ds);
     em.setPackagesToScan("nifori.me.persistence.nifobot");
 
     HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
     em.setJpaVendorAdapter(vendorAdapter);
 
     HashMap<String, Object> properties = new HashMap<>();
-    properties.put("hibernate.hbm2ddl.auto", "none");
-    properties.put("hibernate.dialect", "org.hibernate.dialect.MariaDB103Dialect");
+
+    switch (ds.getConnection().getMetaData().getDatabaseProductName()){
+      case "H2":
+        properties.put("hibernate.hbm2ddl.auto", "create-drop");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        break;
+      default:
+        properties.put("hibernate.hbm2ddl.auto", "none");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.MariaDB103Dialect");
+        break;
+    }
+
     em.setJpaPropertyMap(properties);
 
     return em;

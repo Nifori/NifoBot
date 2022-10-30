@@ -109,9 +109,15 @@ public class RunScripts {
   }
 
   private void validateSystemScripts(Connection con) throws IOException {
-    for (Resource script : resolver.getResources(PATH_FOR_SYSTEM)) {
-      log.info(script.getURI());
-      ScriptUtils.executeSqlScript(con, script);
+    try (var checkStatement = con.prepareStatement("SELECT 1 FROM DATAMODEL_CHECKPOINT_T01")) {
+      checkStatement.execute();
+    } catch (SQLException e) {
+      log.info("Initializing System Tables");
+      for (Resource script : resolver.getResources(PATH_FOR_SYSTEM)) {
+        log.info(script.getURI());
+        ScriptUtils.executeSqlScript(con, script);
+      }
     }
+
   }
 }

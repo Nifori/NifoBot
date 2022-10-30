@@ -32,7 +32,7 @@ public class LobbyService {
 
   @Transactional
   public List<Lobby> getAllActiveLobbies() {
-    Stream<LobbyEntity> allActive = lobbyRepository.findAllActive(Timestamp.valueOf(LocalDateTime.now().minusDays(1).minusDays(50)));
+    Stream<LobbyEntity> allActive = lobbyRepository.findAllActive(Timestamp.valueOf(LocalDateTime.now().minusDays(1).minusDays(80)));
     return allActive.map(mapper::mapToDomain)
         .collect(Collectors.toList());
   }

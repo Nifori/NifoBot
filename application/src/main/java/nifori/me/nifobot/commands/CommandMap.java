@@ -6,16 +6,13 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import nifori.me.nifobot.commands.impl.CommandsCommand;
-import org.togglz.core.manager.FeatureManager;
-
-import static java.util.Objects.isNull;
 
 @Component
 public class CommandMap extends HashMap<String, Command> {
 
-  public CommandMap(List<? extends Command> commands, FeatureManager featureManager) {
+  public CommandMap(List<? extends Command> commands) {
     commands.stream()
-        .filter(command -> isNull(command.getFeature()) || featureManager.isActive(command.getFeature()))
+        .filter(command -> command.isEnabled())
         .forEach(command -> {
           this.put(command.getTrigger(), command);
         });

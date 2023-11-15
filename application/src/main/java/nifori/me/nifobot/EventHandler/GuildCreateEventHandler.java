@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import discord4j.core.event.domain.Event;
 import discord4j.core.event.domain.guild.GuildCreateEvent;
 import nifori.me.domain.model.Server;
-import nifori.me.persistence.services.ServerService;
+import nifori.me.persistence.nifobot.services.ServerService;
 
 @Component
 public class GuildCreateEventHandler extends AbstractEventHandler {

@@ -8,11 +8,12 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import nifori.me.persistence.entities.UserEntity;
+import nifori.me.persistence.nifobot.entities.UserEntity;
+import nifori.me.persistence.nifobot.repositories.UserRepository;
 
-@DataJpaTest
+@SpringBootTest
 public class UserRepositoryTest {
 
   @Autowired

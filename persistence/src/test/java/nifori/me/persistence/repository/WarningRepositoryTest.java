@@ -9,11 +9,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import nifori.me.persistence.entities.WarningEntity;
+import jakarta.transaction.Transactional;
+import nifori.me.persistence.nifobot.entities.WarningEntity;
+import nifori.me.persistence.nifobot.repositories.WarningRepository;
 
-@DataJpaTest
+@SpringBootTest
 public class WarningRepositoryTest {
 
   @Autowired
@@ -47,6 +49,7 @@ public class WarningRepositoryTest {
   }
 
   @Test
+  @Transactional
   public void testGetMessages() {
 
     warningRepository.save(getEntity("Test Message 1"));

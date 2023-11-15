@@ -1,6 +1,0 @@
-CREATE TABLE IF NOT EXISTS PORT_OBSERV_T01 (
-    OID BIGINT  PRIMARY KEY,
-    ChannelOID BIGINT ,
-    ChannelNameTemplate VARCHAR(50),
-    Port INT
-);

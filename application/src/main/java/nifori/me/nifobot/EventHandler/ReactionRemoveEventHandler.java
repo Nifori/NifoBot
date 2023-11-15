@@ -10,7 +10,7 @@ import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.User;
 import lombok.extern.log4j.Log4j2;
-import nifori.me.persistence.services.ReactionService;
+import nifori.me.persistence.nifobot.services.ReactionService;
 
 @Component
 @Log4j2

@@ -1,30 +1,32 @@
 package nifori.me.nifobot.commands.impl;
 
-import discord4j.common.util.Snowflake;
-import discord4j.core.object.PermissionOverwrite;
-import discord4j.core.object.entity.Guild;
-import discord4j.core.object.entity.channel.VoiceChannel;
-import discord4j.core.spec.VoiceChannelCreateSpec;
-import discord4j.rest.util.PermissionSet;
-import nifori.me.domain.model.Channel;
-import nifori.me.domain.model.PortObservation;
-import nifori.me.nifobot.ports.PortObservationUpdater;
-import nifori.me.persistence.services.ChannelService;
-import nifori.me.persistence.services.PortObservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.PermissionOverwrite;
+import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.channel.MessageChannel;
+import discord4j.core.object.entity.channel.VoiceChannel;
+import discord4j.core.spec.VoiceChannelCreateSpec;
 import discord4j.rest.util.Permission;
+import discord4j.rest.util.PermissionSet;
 import lombok.extern.log4j.Log4j2;
+import nifori.me.domain.model.Channel;
+import nifori.me.domain.model.PortObservation;
 import nifori.me.nifobot.commands.Command;
-import nifori.me.nifobot.feature.NBFeature;
 import nifori.me.nifobot.ports.NetStatUtil;
+import nifori.me.nifobot.ports.PortConfiguration;
+import nifori.me.nifobot.ports.PortObservationUpdater;
+import nifori.me.persistence.nifobot.services.ChannelService;
+import nifori.me.persistence.nifobot.services.PortObservationService;
 import reactor.core.publisher.Mono;
 
 @Component
 @Log4j2
+@ConditionalOnProperty("portobservation.enabled")
 public class PortCommand extends Command {
 
   private static final String DEFAULT_TEMPLATE = "Connections: {count}";
@@ -35,6 +37,9 @@ public class PortCommand extends Command {
   private PortObservationService portObservationService;
   @Autowired
   private PortObservationUpdater updater;
+
+  @Autowired
+  private PortConfiguration portConfiguration;
 
   private NetStatUtil util = new NetStatUtil();
 
@@ -49,12 +54,10 @@ public class PortCommand extends Command {
         .getChannel()
         .block();
 
-    if (event.getMember()
-        .get()
-        .getRoles()
-        .toStream()
-        .anyMatch(role -> role.getPermissions()
-            .contains(Permission.ADMINISTRATOR))) {
+    if (portConfiguration.getAdmins()
+        .contains(event.getMember()
+            .get()
+            .getTag())) {
 
       String[] messageArguments = event.getMessage()
           .getContent()
@@ -142,7 +145,7 @@ public class PortCommand extends Command {
   }
 
   @Override
-  public NBFeature getFeature() {
-    return NBFeature.PORT_OBSERVATION;
+  public boolean isEnabled() {
+    return portConfiguration.isEnabled();
   }
 }

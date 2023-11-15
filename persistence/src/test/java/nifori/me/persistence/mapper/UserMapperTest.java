@@ -2,10 +2,11 @@ package nifori.me.persistence.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import nifori.me.persistence.nifobot.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 
 import nifori.me.domain.model.User;
-import nifori.me.persistence.entities.UserEntity;
+import nifori.me.persistence.nifobot.entities.UserEntity;
 
 public class UserMapperTest {
 

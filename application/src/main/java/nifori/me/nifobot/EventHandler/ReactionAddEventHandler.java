@@ -8,7 +8,7 @@ import discord4j.core.event.domain.Event;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
 import lombok.extern.log4j.Log4j2;
-import nifori.me.persistence.services.ReactionService;
+import nifori.me.persistence.nifobot.services.ReactionService;
 
 @Component
 @Log4j2

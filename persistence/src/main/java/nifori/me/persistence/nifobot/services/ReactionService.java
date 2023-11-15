@@ -2,11 +2,10 @@ package nifori.me.persistence.nifobot.services;
 
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import jakarta.transaction.Transactional;
 import nifori.me.domain.model.Reaction;
 import nifori.me.persistence.nifobot.entities.ReactionEntity;
 import nifori.me.persistence.nifobot.mapper.ReactionMapper;

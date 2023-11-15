@@ -1,6 +1,7 @@
 package nifori.me.nifobot.commands.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import discord4j.common.util.Snowflake;
@@ -25,6 +26,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 @Log4j2
+@ConditionalOnProperty("portobservation.enabled")
 public class PortCommand extends Command {
 
   private static final String DEFAULT_TEMPLATE = "Connections: {count}";

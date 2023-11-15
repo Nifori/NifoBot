@@ -1,32 +1,26 @@
 package nifori.me.nifobot.playernames;
 
-import nifori.me.persistence.nifobot.services.PlayerObservationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import discord4j.common.util.Snowflake;
-import discord4j.core.GatewayDiscordClient;
 import discord4j.core.spec.MessageEditSpec;
-import lombok.Data;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import nifori.me.nifobot.gateway.GatewayUser;
+import nifori.me.persistence.nifobot.services.PlayerObservationService;
 
-@Data
-@Configuration
+@Component
+@RequiredArgsConstructor
 @Log4j2
-public class PlayerNamesUpdater {
+@ConditionalOnProperty("playernames.enabled")
+public class PlayerNamesUpdater extends GatewayUser {
 
   private static final String template = "%s | %s |  %s | %s";
 
-  @Autowired
-  private PlayerNamesApplicationService applicationService;
-
-  @Autowired
-  private PlayerObservationService playerObservationService;
-
-  @Setter
-  private GatewayDiscordClient gateway;
+  private final PlayerNamesApplicationService applicationService;
+  private final PlayerObservationService playerObservationService;
 
   @Scheduled(fixedRateString = "${playernames.refreshrate:300000}")
   public void update() {

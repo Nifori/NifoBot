@@ -42,7 +42,7 @@ public class GlobalNamePersistenceConfiguration {
 
     HashMap<String, Object> properties = new HashMap<>();
     properties.put("hibernate.hbm2ddl.auto", "none");
-    properties.put("hibernate.dialect", "org.hibernate.dialect.MariaDB103Dialect");
+    properties.put("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
     em.setJpaPropertyMap(properties);
 
     return em;

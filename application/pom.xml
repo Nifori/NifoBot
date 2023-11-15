@@ -24,10 +24,6 @@
             <groupId>nifori.me</groupId>
             <artifactId>nifobot-persistence</artifactId>
         </dependency>
-        <dependency>
-            <groupId>nifori.me</groupId>
-            <artifactId>nifobot-common</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

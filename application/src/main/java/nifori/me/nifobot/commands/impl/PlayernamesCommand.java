@@ -3,6 +3,7 @@ package nifori.me.nifobot.commands.impl;
 import nifori.me.domain.model.PlayerObservation;
 import nifori.me.persistence.nifobot.services.PlayerObservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -15,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 @Log4j2
+@ConditionalOnProperty("playernames.enabled")
 public class PlayernamesCommand extends Command {
 
   @Autowired

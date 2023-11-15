@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import jakarta.transaction.Transactional;
 import nifori.me.domain.model.Warning;
 import nifori.me.persistence.nifobot.entities.WarningEntity;
 import nifori.me.persistence.nifobot.mapper.WarningMapper;
